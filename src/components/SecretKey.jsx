@@ -71,10 +71,10 @@ const SecretKey = () => {
               })}
             </>
           )}
-          <button className={classes.button} onClick={keyGenerateHandler}>
-            Generate New Key
-          </button>
         </ul>
+        <button className={classes.button} onClick={keyGenerateHandler}>
+          Generate New Key
+        </button>
       </div>
     </>
   );
