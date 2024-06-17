@@ -1,0 +1,10 @@
+.container {
+  width: 1000px;
+  max-width: 100%;
+  height: calc(100vh - 100px);
+  background: rgba(var(--secondary), 1);
+  padding: 20px;
+  border-radius: 20px;
+  overflow-y: auto;
+  border: 1px solid rgba(var(--border), 0.3);
+}
