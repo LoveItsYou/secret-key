@@ -2,13 +2,14 @@
   --primary: 15, 23, 42;
   --secondary: 30, 41, 59;
   --text: 203, 213, 225;
-  --border: 229, 231, 235;
+  --gray: 229, 231, 235;
+  --mark: 248, 191, 166;
 }
 
 #root {
-  background: rgba(var(--primary), 1);
+  background: rgba(var(--primary));
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;

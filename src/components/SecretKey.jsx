@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 import classes from "../styles/SecretKey.module.css";
 import loader from "../assets/loader.webp";
@@ -25,6 +27,7 @@ const SecretKey = () => {
           if (response.status === 200) {
             const data = await response.json();
             setLoading(false);
+            setError(false);
             setResult(data);
           } else {
             throw new Error("There was an Error");
@@ -43,40 +46,53 @@ const SecretKey = () => {
   };
 
   return (
-    <>
-      <h2 className={classes.heading}>Secret Key Generator</h2>
-      <div className={classes.secretKey}>
-        <ul style={{ opacity: result.key && 1 }}>
+    <div className={classes.secretKey}>
+      <div className={classes.header}>
+        <div style={{ fontSize: "20px" }}>❤️</div>
+        <h2>Secret Key Generator</h2>
+        <div className={classes.link}>
+          <a href="https://devababil.com/DevAbabil" target="_blank">
+            <FontAwesomeIcon icon={faGithub} />
+          </a>
+        </div>
+      </div>
+
+      <table className={classes.table} style={{ opacity: result.key && 1 }}>
+        <tbody>
+          <tr className={classes.tableHeader}>
+            <th>Type</th>
+            <th>Key</th>
+          </tr>
           {result.key && (
             <>
               {Object.keys(result.key).map((keyName) => {
                 return (
-                  <li key={keyName}>
-                    <div className={classes.keyName}>{keyName}</div>
-                    <div className={classes.key}>
+                  <tr key={keyName}>
+                    <td className={classes.keyName}>{keyName}</td>
+                    <td className={classes.key}>
                       {loading && (
                         <div
                           className={`${classes.loading}`}
                           style={{ display: loading && "block" }}
                         >
-                          Loading...
                           {loading && <img src={loader} />}
                         </div>
                       )}
                       {error && "Error to generate key"}
-                      {!loading && result && result.key[keyName]}
-                    </div>
-                  </li>
+                      {!loading && !error && result && result.key[keyName]}
+                    </td>
+                  </tr>
                 );
               })}
             </>
           )}
-        </ul>
-        <button className={classes.button} onClick={keyGenerateHandler}>
-          Generate New Key
-        </button>
-      </div>
-    </>
+        </tbody>
+      </table>
+
+      <button className={classes.button} onClick={keyGenerateHandler}>
+        Generate New Key
+      </button>
+    </div>
   );
 };
 
