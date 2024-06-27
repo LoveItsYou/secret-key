@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import api_png from "../assets/api.png";
 
 import classes from "../styles/SecretKey.module.css";
 import loader from "../assets/loader.webp";
@@ -50,13 +51,25 @@ const SecretKey = () => {
   return (
     <div className={classes.secretKey}>
       <div className={classes.header}>
-        <div style={{ fontSize: "20px" }}>❤️</div>
-        <h2>Secret Key Generator</h2>
-        <div className={classes.link}>
-          <a href="https://devababil.com/DevAbabil" target="_blank">
-            <FontAwesomeIcon icon={faGithub} />
+        <div style={{ fontSize: "20px" }}>
+          <a href="https://devababil.com" target="_blank">
+            🤍
           </a>
         </div>
+        <h2>Secret Key Generator</h2>
+
+        <ul className={classes.link}>
+          <li>
+            <a href="https://github.com/DevAbabil" target="_blank">
+              <FontAwesomeIcon icon={faGithub} />
+            </a>
+          </li>
+          <li>
+            <a href="https://api.codeababil.com/secret-key" target="_blank">
+              <img src={api_png} />
+            </a>
+          </li>
+        </ul>
       </div>
       {initialLoader && <img className={classes.initialLoader} src={loader} />}
       {!initialLoader && (
@@ -66,6 +79,7 @@ const SecretKey = () => {
               <tr className={classes.tableHeader}>
                 <th>Type</th>
                 <th>Key</th>
+                <th>Length</th>
               </tr>
               {result.key && (
                 <>
@@ -88,6 +102,13 @@ const SecretKey = () => {
                             </div>
                           )}
                           {!loading && !error && result && result.key[keyName]}
+                        </td>
+                        <td className={classes.keyLength}>
+                          {loading && <img src={loader} />}
+                          {!loading &&
+                            !error &&
+                            result &&
+                            result.key[keyName].toString().length}
                         </td>
                       </tr>
                     );
