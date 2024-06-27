@@ -10,6 +10,7 @@ const SecretKey = () => {
   const [result, setResult] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [initialLoader, setInitialLoader] = useState(true);
 
   useEffect(() => {
     if (isCall) {
@@ -29,6 +30,7 @@ const SecretKey = () => {
             setLoading(false);
             setError(false);
             setResult(data);
+            setInitialLoader(false);
           } else {
             throw new Error("There was an Error");
           }
@@ -56,42 +58,49 @@ const SecretKey = () => {
           </a>
         </div>
       </div>
-
-      <table className={classes.table} style={{ opacity: result.key && 1 }}>
-        <tbody>
-          <tr className={classes.tableHeader}>
-            <th>Type</th>
-            <th>Key</th>
-          </tr>
-          {result.key && (
-            <>
-              {Object.keys(result.key).map((keyName) => {
-                return (
-                  <tr key={keyName}>
-                    <td className={classes.keyName}>{keyName}</td>
-                    <td className={classes.key}>
-                      {loading && (
-                        <div
-                          className={`${classes.loading}`}
-                          style={{ display: loading && "block" }}
-                        >
-                          {loading && <img src={loader} />}
-                        </div>
-                      )}
-                      {error && "Error to generate key"}
-                      {!loading && !error && result && result.key[keyName]}
-                    </td>
-                  </tr>
-                );
-              })}
-            </>
-          )}
-        </tbody>
-      </table>
-
-      <button className={classes.button} onClick={keyGenerateHandler}>
-        Generate New Key
-      </button>
+      {initialLoader && <img className={classes.initialLoader} src={loader} />}
+      {!initialLoader && (
+        <>
+          <table className={classes.table}>
+            <tbody>
+              <tr className={classes.tableHeader}>
+                <th>Type</th>
+                <th>Key</th>
+              </tr>
+              {result.key && (
+                <>
+                  {Object.keys(result.key).map((keyName) => {
+                    return (
+                      <tr key={keyName}>
+                        <td className={classes.keyName}>{keyName}</td>
+                        <td className={classes.key}>
+                          {loading && (
+                            <div
+                              className={`${classes.loading}`}
+                              style={{ display: loading && "block" }}
+                            >
+                              {loading && <img src={loader} />}
+                            </div>
+                          )}
+                          {error && (
+                            <div className={classes.error}>
+                              Error to generate key
+                            </div>
+                          )}
+                          {!loading && !error && result && result.key[keyName]}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </>
+              )}
+            </tbody>
+          </table>
+          <button className={classes.button} onClick={keyGenerateHandler}>
+            Generate New Key
+          </button>
+        </>
+      )}
     </div>
   );
 };
