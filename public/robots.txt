@@ -1,0 +1,9 @@
+# robots.txt
+User-agent: *
+
+Allow: /
+
+# Disallowed Sub-Directories
+# Disallow: /login/
+
+Sitemap: https://devababil.com/sitemap.xml
