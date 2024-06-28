@@ -18,13 +18,10 @@ const SecretKey = () => {
       (async () => {
         try {
           setLoading(true);
-          const response = await fetch(
-            "https://api.codeababil.com/secret-key",
-            {
-              method: "GET",
-              headers: { "content-type": "application/json" },
-            }
-          );
+          const response = await fetch("https://api.codeababil.com/secret-key", {
+            method: "GET",
+            headers: { "content-type": "application/json" },
+          });
 
           if (response.status === 200) {
             const data = await response.json();
@@ -52,7 +49,7 @@ const SecretKey = () => {
     <div className={classes.secretKey}>
       <div className={classes.header}>
         <div style={{ fontSize: "20px" }}>
-          <a href="https://devababil.com" target="_blank">
+          <a href="https://devababil.com" target="_blank" title="Website">
             🤍
           </a>
         </div>
@@ -60,12 +57,12 @@ const SecretKey = () => {
 
         <ul className={classes.link}>
           <li>
-            <a href="https://github.com/DevAbabil" target="_blank">
+            <a href="https://github.com/DevAbabil" target="_blank" title="GitHub">
               <FontAwesomeIcon icon={faGithub} />
             </a>
           </li>
           <li>
-            <a href="https://api.codeababil.com/secret-key" target="_blank">
+            <a href="https://api.codeababil.com/secret-key" target="_blank" title="API - URL">
               <img src={api_png} />
             </a>
           </li>
@@ -87,28 +84,18 @@ const SecretKey = () => {
                     return (
                       <tr key={keyName}>
                         <td className={classes.keyName}>{keyName}</td>
-                        <td className={classes.key}>
+                        <td className={classes.key} title={keyName}>
                           {loading && (
-                            <div
-                              className={`${classes.loading}`}
-                              style={{ display: loading && "block" }}
-                            >
+                            <div className={`${classes.loading}`} style={{ display: loading && "block" }}>
                               {loading && <img src={loader} />}
                             </div>
                           )}
-                          {error && (
-                            <div className={classes.error}>
-                              Error to generate key
-                            </div>
-                          )}
+                          {error && <div className={classes.error}>Error to generate key</div>}
                           {!loading && !error && result && result.key[keyName]}
                         </td>
-                        <td className={classes.keyLength}>
+                        <td className={classes.keyLength} title={`${keyName} Length`}>
                           {loading && <img src={loader} />}
-                          {!loading &&
-                            !error &&
-                            result &&
-                            result.key[keyName].toString().length}
+                          {!loading && !error && result && result.key[keyName].toString().length}
                         </td>
                       </tr>
                     );
