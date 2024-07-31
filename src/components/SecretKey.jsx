@@ -49,7 +49,7 @@ const SecretKey = () => {
   };
 
   return (
-    <div className={`${classes.secretKey} ${loading && "cursor-wait"}`}>
+    <div className={`${classes.secretKey} ${loading && "cursor-wait"} mx-auto`}>
       <div className={classes.header}>
         <div style={{ fontSize: "20px" }} className="select-none">
           <a href="https://devababil.com" target="_blank" title="Website">
@@ -84,12 +84,15 @@ const SecretKey = () => {
         <>
           <table className={classes.table}>
             <tbody>
+              {/* Table Header */}
               <tr className={classes.tableHeader}>
                 <th className="select-none">Type</th>
                 <th className="select-none">Key</th>
-                <td></td>
+                <th className="select-none">Copy</th>
                 <th className="select-none">Length</th>
               </tr>
+
+              {/* Secret Key */}
               {result.key && (
                 <>
                   {Object.keys(result.key).map((keyName) => {
@@ -125,8 +128,12 @@ const SecretKey = () => {
                               : null}
                           </div>
                         </td>
+
+                        {/* Copy to clipboard  */}
                         <td
-                          className={`${classes.keyLength} ${
+                          className={`${
+                            classes.copy
+                          } bg-[rgba(var(--primary),0.4)] text-center ${
                             loading ? "opacity-60" : ""
                           } !w-[90px]`}
                         >
@@ -136,6 +143,8 @@ const SecretKey = () => {
                             error={error}
                           />
                         </td>
+
+                        {/* Key length */}
                         <td
                           className={`${classes.keyLength}  select-none`}
                           title={`${keyName} Length`}

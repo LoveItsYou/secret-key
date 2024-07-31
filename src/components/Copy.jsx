@@ -1,4 +1,6 @@
 import { useEffect, useReducer } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCopy } from "@fortawesome/free-regular-svg-icons";
 
 const initialState = {
   text: null,
@@ -57,7 +59,7 @@ const Copy = ({ text, loading, error, ...rest }) => {
         dispatch({
           type: "RESET_COPY",
         });
-      }, 3000);
+      }, 1000);
     }
 
     (loading || error) &&
@@ -76,22 +78,27 @@ const Copy = ({ text, loading, error, ...rest }) => {
           type: "COPY",
         })
       }
-      className={`bg-[rgba(var(--primary),0.5)] px-2 rounded-md select-none ${
+      className={`px-3 rounded-md select-none ${
         error && "cursor-not-allowed"
       } ${loading && "cursor-wait"}`}
       disabled={loading || error}
       {...rest}
     >
       {state.copyClicked ? (
-        <span
-          className={`${
-            state.copyClicked ? "font-bold text-[rgba(var(--mark),1)]" : ""
-          }`}
-        >
-          Copied
+        <span className="inline-block relative before:content-['Copied'] before:absolute before:left-[25px] before:top-[-20px] before:bg-[rgba(var(--primary),0.5)] before:text-[rgba(var(--mark))] before:p-2 before:rounded-lg">
+          <FontAwesomeIcon
+            icon={faCopy}
+            className={`${
+              state.copyClicked
+                ? "font-extrabold text-[rgba(var(--mark),1)] text-2xl "
+                : ""
+            }`}
+          />
         </span>
       ) : (
-        "Copy"
+        <span>
+          <FontAwesomeIcon icon={faCopy} className="text-xl" />
+        </span>
       )}
     </button>
   );
