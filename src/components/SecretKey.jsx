@@ -112,7 +112,7 @@ const SecretKey = () => {
                               {loading && <img src={loader} />}
                             </div>
                           )}
-                          {error && (
+                          {error && !loading && (
                             <div className={classes.error}>
                               Error to generate key
                             </div>
