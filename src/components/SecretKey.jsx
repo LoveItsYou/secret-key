@@ -49,7 +49,7 @@ const SecretKey = () => {
   };
 
   return (
-    <div className={classes.secretKey}>
+    <div className={`${classes.secretKey} ${loading && "cursor-wait"}`}>
       <div className={classes.header}>
         <div style={{ fontSize: "20px" }} className="select-none">
           <a href="https://devababil.com" target="_blank" title="Website">
@@ -132,8 +132,8 @@ const SecretKey = () => {
                         >
                           <Copy
                             text={result.key[keyName]}
-                            disabled={loading}
                             loading={loading}
+                            error={error}
                           />
                         </td>
                         <td
@@ -154,7 +154,10 @@ const SecretKey = () => {
             </tbody>
           </table>
           <button
-            className={`${classes.button} select-none`}
+            className={`${classes.button} select-none ${
+              loading && "opacity-60 cursor-wait"
+            }`}
+            disabled={loading}
             onClick={keyGenerateHandler}
           >
             Generate New Key

@@ -30,7 +30,7 @@ const reducer = (state, action) => {
   }
 };
 
-const Copy = ({ text, loading, ...rest }) => {
+const Copy = ({ text, loading, error, ...rest }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -60,13 +60,13 @@ const Copy = ({ text, loading, ...rest }) => {
       }, 3000);
     }
 
-    loading &&
+    (loading || error) &&
       dispatch({
         type: "RESET_COPY",
       });
 
     return () => clearInterval(intervalId);
-  }, [state.text, state.copyClicked, loading]);
+  }, [state.text, state.copyClicked, loading, error]);
 
   return (
     <button
@@ -76,7 +76,10 @@ const Copy = ({ text, loading, ...rest }) => {
           type: "COPY",
         })
       }
-      className="bg-[rgba(var(--primary),0.5)] px-2 rounded-md select-none"
+      className={`bg-[rgba(var(--primary),0.5)] px-2 rounded-md select-none ${
+        error && "cursor-not-allowed"
+      } ${loading && "cursor-wait"}`}
+      disabled={loading || error}
       {...rest}
     >
       {state.copyClicked ? (
