@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import api_png from "../assets/api.png";
-
 import classes from "../styles/SecretKey.module.css";
 import loader from "../assets/loader.webp";
+import Copy from "./Copy";
 
 const SecretKey = () => {
   const [isCall, setIsCAll] = useState(true);
@@ -51,14 +51,14 @@ const SecretKey = () => {
   return (
     <div className={classes.secretKey}>
       <div className={classes.header}>
-        <div style={{ fontSize: "20px" }}>
+        <div style={{ fontSize: "20px" }} className="select-none">
           <a href="https://devababil.com" target="_blank" title="Website">
             🤍
           </a>
         </div>
-        <h2>Secret Key Generator</h2>
+        <h2 className="select-none">Secret Key Generator</h2>
 
-        <ul className={classes.link}>
+        <ul className={`${classes.link} select-none`}>
           <li>
             <a
               href="https://github.com/DevAbabil"
@@ -85,16 +85,21 @@ const SecretKey = () => {
           <table className={classes.table}>
             <tbody>
               <tr className={classes.tableHeader}>
-                <th>Type</th>
-                <th>Key</th>
-                <th>Length</th>
+                <th className="select-none">Type</th>
+                <th className="select-none">Key</th>
+                <td></td>
+                <th className="select-none">Length</th>
               </tr>
               {result.key && (
                 <>
                   {Object.keys(result.key).map((keyName) => {
                     return (
                       <tr key={keyName}>
-                        <td className={classes.keyName}>{keyName}</td>
+                        <td
+                          className={`${classes.keyName} select-none font-bold`}
+                        >
+                          {keyName}
+                        </td>
                         <td
                           className={`${classes.key} bg-[rgba(var(--primary),0.4)]`}
                           title={keyName}
@@ -121,7 +126,18 @@ const SecretKey = () => {
                           </div>
                         </td>
                         <td
-                          className={classes.keyLength}
+                          className={`${classes.keyLength} ${
+                            loading ? "opacity-60" : ""
+                          } !w-[90px]`}
+                        >
+                          <Copy
+                            text={result.key[keyName]}
+                            disabled={loading}
+                            loading={loading}
+                          />
+                        </td>
+                        <td
+                          className={`${classes.keyLength}  select-none`}
                           title={`${keyName} Length`}
                         >
                           {loading && <img src={loader} />}
@@ -137,7 +153,10 @@ const SecretKey = () => {
               )}
             </tbody>
           </table>
-          <button className={classes.button} onClick={keyGenerateHandler}>
+          <button
+            className={`${classes.button} select-none`}
+            onClick={keyGenerateHandler}
+          >
             Generate New Key
           </button>
         </>

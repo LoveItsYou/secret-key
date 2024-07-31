@@ -7,7 +7,6 @@
 }
 
 #root {
-  background: rgba(var(--primary));
   width: 100%;
   min-height: 100vh;
   display: flex;
@@ -18,4 +17,8 @@
 
 img {
   max-width: 100%;
+}
+
+body {
+  background: rgba(var(--primary));
 }
