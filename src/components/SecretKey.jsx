@@ -5,6 +5,7 @@ import api_png from "../assets/api.png";
 import classes from "../styles/SecretKey.module.css";
 import loader from "../assets/loader.webp";
 import Copy from "./Copy";
+import { faWarning } from "@fortawesome/free-solid-svg-icons";
 
 const SecretKey = () => {
   const [isCall, setIsCAll] = useState(true);
@@ -12,6 +13,7 @@ const SecretKey = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [initialLoader, setInitialLoader] = useState(true);
+  const [copyCount, setCopyCount] = useState({});
 
   useEffect(() => {
     if (isCall) {
@@ -44,8 +46,30 @@ const SecretKey = () => {
     }
   }, [isCall]);
 
+  useEffect(() => {
+    const temp = {};
+    if (result.key) {
+      Object.keys(result.key).forEach((type) => {
+        if (!temp[type]) {
+          temp[type] = 0;
+        }
+      });
+    }
+
+    setCopyCount(temp);
+  }, [result]);
+
   const keyGenerateHandler = () => {
     setIsCAll(true);
+  };
+
+  const handleCopyCount = (key) => {
+    setCopyCount((prevState) => {
+      return {
+        ...prevState,
+        [key]: prevState[key] + 1,
+      };
+    });
   };
 
   return (
@@ -80,99 +104,163 @@ const SecretKey = () => {
         </ul>
       </div>
       {initialLoader && <img className={classes.initialLoader} src={loader} />}
-      {!initialLoader && (
-        <>
-          <table className={classes.table}>
-            <tbody>
-              {/* Table Header */}
-              <tr className={classes.tableHeader}>
-                <th className="select-none">Type</th>
-                <th className="select-none">Key</th>
-                <th className="select-none">Copy</th>
-                <th className="select-none">Length</th>
-              </tr>
+      <div>
+        {!initialLoader && (
+          <>
+            <table className={classes.table}>
+              <tbody>
+                {/* Table Header */}
+                <tr className={classes.tableHeader}>
+                  <th className="select-none">Type</th>
+                  <th className="select-none">Key</th>
+                  <th className="select-none">Copy</th>
+                  <th className="select-none">Count</th>
+                  <th className="select-none">Length</th>
+                </tr>
 
-              {/* Secret Key */}
-              {result.key && (
-                <>
-                  {Object.keys(result.key).map((keyName) => {
-                    return (
-                      <tr key={keyName}>
-                        <td
-                          className={`${classes.keyName} select-none font-bold`}
-                        >
-                          {keyName}
-                        </td>
-                        <td
-                          className={`${classes.key} bg-[rgba(var(--primary),0.4)]`}
-                          title={keyName}
-                        >
-                          {loading && (
-                            <div
-                              className={`${classes.loading}`}
-                              style={{ display: loading && "block" }}
-                            >
-                              {loading && <img src={loader} />}
+                {/* Secret Key */}
+                {result.key && (
+                  <>
+                    {Object.keys(result.key).map((keyName) => {
+                      return (
+                        <tr key={keyName}>
+                          <td
+                            className={`${classes.keyName} select-none font-bold`}
+                          >
+                            {keyName}
+                          </td>
+
+                          <td
+                            className={`${classes.key} bg-[rgba(var(--primary),0.4)]`}
+                            title={keyName}
+                          >
+                            {loading && (
+                              <div
+                                className={`${classes.loading}`}
+                                style={{ display: loading && "block" }}
+                              >
+                                {loading && <img src={loader} />}
+                              </div>
+                            )}
+                            {error && !loading && (
+                              <div className={classes.error}>
+                                Error to generate key
+                              </div>
+                            )}
+                            <div className="flex justify-between px-1">
+                              {!loading &&
+                              !error &&
+                              result &&
+                              result.key[keyName]
+                                ? result.key[keyName]
+                                    .split("")
+                                    .map((char, i) => (
+                                      <span key={i}>{char}</span>
+                                    ))
+                                : null}
                             </div>
-                          )}
-                          {error && !loading && (
-                            <div className={classes.error}>
-                              Error to generate key
-                            </div>
-                          )}
-                          <div className="flex justify-between px-1">
-                            {!loading && !error && result && result.key[keyName]
-                              ? result.key[keyName]
-                                  .split("")
-                                  .map((char, i) => <span key={i}>{char}</span>)
-                              : null}
-                          </div>
-                        </td>
+                          </td>
 
-                        {/* Copy to clipboard  */}
-                        <td
-                          className={`${
-                            classes.copy
-                          } bg-[rgba(var(--primary),0.4)] text-center ${
-                            loading ? "opacity-60" : ""
-                          } !w-[90px]`}
-                        >
-                          <Copy
-                            text={result.key[keyName]}
-                            loading={loading}
-                            error={error}
-                          />
-                        </td>
+                          {/* Copy to clipboard  */}
+                          <td
+                            className={`${
+                              classes.copy
+                            } bg-[rgba(var(--primary),0.4)] text-center ${
+                              loading ? "opacity-60" : ""
+                            } !w-[90px]`}
+                          >
+                            <Copy
+                              text={result.key[keyName]}
+                              loading={loading}
+                              error={error}
+                              copyCount={() => handleCopyCount(keyName)}
+                            />
+                          </td>
 
-                        {/* Key length */}
-                        <td
-                          className={`${classes.keyLength}  select-none`}
-                          title={`${keyName} Length`}
-                        >
-                          {loading && <img src={loader} />}
-                          {!loading &&
-                            !error &&
-                            result &&
-                            result.key[keyName].toString().length}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </>
+                          <td
+                            className={`${classes.copyCount} text-center border-t border-[rgba(var(--mark),0.3)] select-none w-[110px]`}
+                          >
+                            <span className="!w-[20px] inline-block">
+                              {loading && (
+                                <img src={loader} className="max-w-full" />
+                              )}
+                              <span
+                                className={`${
+                                  copyCount[keyName] > 0 &&
+                                  copyCount[keyName] < 3
+                                    ? "text-[rgba(var(--mark))] font-bold"
+                                    : copyCount[keyName] >= 3
+                                    ? "text-[yellow]"
+                                    : ""
+                                }`}
+                              >
+                                {!loading && copyCount[keyName]}
+                              </span>
+                            </span>
+                          </td>
+
+                          {/* Key length */}
+                          <td
+                            className={`${classes.keyLength}  select-none border-t border-[rgba(var(--mark),0.3)]`}
+                            title={`${keyName} Length`}
+                          >
+                            {loading && <img src={loader} />}
+                            {!loading &&
+                              !error &&
+                              result &&
+                              result.key[keyName].toString().length}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </>
+                )}
+              </tbody>
+            </table>
+            <button
+              className={`${classes.button} select-none ${
+                loading && "opacity-60 cursor-wait"
+              }`}
+              disabled={loading}
+              onClick={keyGenerateHandler}
+            >
+              Generate New Key
+            </button>
+          </>
+        )}
+      </div>
+      <div className="inline-block text-[rgb(var(--text))]  opacity-[0.55]">
+        {Object.keys(copyCount).filter(
+          (keyName) => copyCount[keyName] > 3 && `${keyName}`
+        ).length > 0 && (
+          <div className="px-2 py-3">
+            <div>
+              <span className="text-[yellow] px-1">
+                <FontAwesomeIcon icon={faWarning} />
+              </span>
+              <span className="font-bold">Warning</span>
+              {" : "}
+              {Object.keys(copyCount).map(
+                (keyName) => copyCount[keyName] > 3 && `${keyName}, `
               )}
-            </tbody>
-          </table>
-          <button
-            className={`${classes.button} select-none ${
-              loading && "opacity-60 cursor-wait"
-            }`}
-            disabled={loading}
-            onClick={keyGenerateHandler}
-          >
-            Generate New Key
-          </button>
-        </>
-      )}
+              <span>
+                - Copied more than <span className="text-[yellow]">3</span>{" "}
+                times. We recomand to use a secret key only for one purpose.
+              </span>
+            </div>
+            <div className="mt-1">
+              <span className="text-[yellow] px-1">
+                <FontAwesomeIcon icon={faWarning} />
+              </span>
+              <span className="font-bold">Warning : </span>
+              <span>
+                If you need multiple secret key. you can generate new secret key
+                by pressing &apos;Generate New Key&apos; button.
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
