@@ -73,14 +73,27 @@ const SecretKey = () => {
   };
 
   return (
-    <div className={`${classes.secretKey} ${loading && "cursor-wait"} mx-auto`}>
+    <div
+      className={`${classes.secretKey} ${
+        loading && "cursor-wait"
+      } mx-auto shadow-md shadow-[rgba(var(--primary))]`}
+    >
       <div className={classes.header}>
-        <div style={{ fontSize: "20px" }} className="select-none">
+        <div
+          style={{ fontSize: "20px" }}
+          className="select-none flex justify-between"
+        >
           <a href="https://devababil.com" target="_blank" title="Website">
-            🤍
+            <div className="flex items-center gap-1">
+              🤍
+              <div className="text-sm text-[rgba(var(--text))]">
+                {" "}
+                Mon Jun 17 2024, 6:53:11PM{" "}
+              </div>
+            </div>
           </a>
         </div>
-        <h2 className="select-none">Secret Key Generator</h2>
+        <h2 className="select-none mr-14">Secret Key Generator</h2>
 
         <ul className={`${classes.link} select-none`}>
           <li>
@@ -103,7 +116,14 @@ const SecretKey = () => {
           </li>
         </ul>
       </div>
-      {initialLoader && <img className={classes.initialLoader} src={loader} />}
+      {initialLoader && (
+        <div className="w-full h-[350px] flex items-center justify-center flex-col">
+          <img className="w-[110px] h-auto block max-w-full" src={loader} />
+          <span className="font-bold text-[rgba(var(--mark),0.8)]">
+            Please wait...
+          </span>
+        </div>
+      )}
       <div>
         {!initialLoader && (
           <>
@@ -155,7 +175,9 @@ const SecretKey = () => {
                                 ? result.key[keyName]
                                     .split("")
                                     .map((char, i) => (
-                                      <span key={i}>{char}</span>
+                                      <span key={i} className="italic">
+                                        {char}
+                                      </span>
                                     ))
                                 : null}
                             </div>
@@ -222,7 +244,9 @@ const SecretKey = () => {
                 loading && "opacity-60 cursor-wait"
               }`}
               disabled={loading}
-              onClick={keyGenerateHandler}
+              onClick={() => {
+                keyGenerateHandler();
+              }}
             >
               Generate New Key
             </button>
@@ -230,9 +254,8 @@ const SecretKey = () => {
         )}
       </div>
       <div className="inline-block text-[rgb(var(--text))]  opacity-[0.55]">
-        {Object.keys(copyCount).filter(
-          (keyName) => copyCount[keyName] > 3 && `${keyName}`
-        ).length > 0 && (
+        {Object.keys(copyCount).filter((keyName) => copyCount[keyName] > 3)
+          .length > 0 && (
           <div className="px-2 py-3">
             <div>
               <span className="text-[yellow] px-1">
