@@ -246,6 +246,7 @@ const SecretKey = () => {
               disabled={loading}
               onClick={() => {
                 keyGenerateHandler();
+                setCopyCount({});
               }}
             >
               Generate New Key
