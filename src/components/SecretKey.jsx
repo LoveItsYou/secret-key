@@ -6,6 +6,7 @@ import classes from "../styles/SecretKey.module.css";
 import loader from "../assets/loader.webp";
 import Copy from "./Copy";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
+import ViewsCounter from "./ViewsCounter";
 
 const SecretKey = () => {
   const [isCall, setIsCAll] = useState(true);
@@ -90,6 +91,7 @@ const SecretKey = () => {
                 {" "}
                 Mon Jun 17 2024, 6:53:11PM{" "}
               </div>
+              <ViewsCounter />
             </div>
           </a>
         </div>
