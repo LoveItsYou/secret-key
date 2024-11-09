@@ -33,55 +33,61 @@ const ViewsCounter = () => {
 
   useEffect(() => {
     const fetchId = setTimeout(() => {
-      const fetchIntervalId = setInterval(() => {
-        (async () => {
-          try {
-            const fetchData = await (
-              await fetch(
-                "https://mpvbackend.vercel.app/api/mpv/views?project=secret-key",
-                {
-                  method: "GET",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }
-              )
-            ).json();
+      const fn = async () => {
+        try {
+          const fetchData = await (
+            await fetch(
+              "https://mpvbackend.vercel.app/api/mpv/views?project=secret-key",
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+          ).json();
 
-            const {
-              data: { count },
-            } = fetchData;
+          const {
+            data: { count },
+          } = fetchData;
 
-            if (fetchData.status === 200 && fetchData.success === true) {
-              dispatch({
-                type: "SetCount",
-                value: count,
-              });
-            } else {
-              throw Error(fetchData.message);
-            }
-          } catch (error) {
+          if (fetchData.status === 200 && fetchData.success === true) {
             dispatch({
-              type: "Error",
-              value: error.message,
+              type: "SetCount",
+              value: count,
             });
+          } else {
+            throw Error(fetchData.message);
           }
-        })();
+        } catch (error) {
+          dispatch({
+            type: "Error",
+            value: error.message,
+          });
+        }
+      };
+
+      fn();
+      const fetchIntervalId = setInterval(() => {
+        fn();
       }, 10000);
 
       location.pathname !== "/" ? clearInterval(fetchIntervalId) : null;
       clearTimeout(fetchId);
-    }, 1200);
+    }, 2000);
   }, []);
 
   return (
     <div className="text-[rgba(var(--text))] flex gap-x-1 text-sm font-bold ">
       <p>App views:</p>
-      {!loading && count ? (
-        <p> {count}</p>
-      ) : (
-        <img src={loader} className="size-[20px]" />
-      )}
+      <div className="w-[150px]">
+        {" "}
+        {!loading && count ? (
+          <p> {count}</p>
+        ) : (
+          <img src={loader} className="size-[20px]" />
+        )}
+      </div>
     </div>
   );
 };

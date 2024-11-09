@@ -95,7 +95,7 @@ const SecretKey = () => {
             </div>
           </a>
         </div>
-        <h2 className="select-none mr-[180px]">Secret Key Generator</h2>
+        <h2 className="select-none mr-[280px]">Secret Key Generator</h2>
 
         <ul className={`${classes.link} select-none`}>
           <li>
