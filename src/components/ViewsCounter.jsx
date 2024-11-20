@@ -1,95 +1,27 @@
+import SiteViews from "react-siteviews";
+import { memo, useEffect } from "react";
 import loader from "../assets/loader.webp";
-import { useEffect, useReducer } from "react";
-
-const initialState = {
-  loading: true,
-  count: 0,
-  error: "",
-};
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "SetCount": {
-      return {
-        ...state,
-        loading: false,
-        error: "",
-        count: action.value,
-      };
-    }
-    case "Error": {
-      return {
-        ...state,
-        loading: false,
-        error: action.value,
-        count: 0,
-      };
-    }
-  }
-};
 
 const ViewsCounter = () => {
-  const [{ loading, count }, dispatch] = useReducer(reducer, initialState);
-
   useEffect(() => {
-    const fetchId = setTimeout(() => {
-      const fn = async () => {
-        try {
-          const fetchData = await (
-            await fetch(
-              "https://mpvbackend.vercel.app/api/mpv/views?project=secret-key",
-              {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            )
-          ).json();
-
-          const {
-            data: { count },
-          } = fetchData;
-
-          if (fetchData.status === 200 && fetchData.success === true) {
-            dispatch({
-              type: "SetCount",
-              value: count,
-            });
-          } else {
-            throw Error(fetchData.message);
-          }
-        } catch (error) {
-          dispatch({
-            type: "Error",
-            value: error.message,
-          });
-        }
-      };
-
-      fn();
-      const fetchIntervalId = setInterval(() => {
-        fn();
-      }, 10000);
-
-      location.pathname !== "/" ? clearInterval(fetchIntervalId) : null;
-      clearTimeout(fetchId);
-    }, 2000);
+    console.log("ViewsCounter rendred");
   }, []);
-
   return (
-    <div className="text-[rgba(var(--text))] flex gap-x-1 text-sm font-bold ">
-      <p>App views:</p>
-      <div className="w-[150px]">
-        {" "}
-        {!loading && count ? (
-          <p> {count}</p>
-        ) : (
-          <img src={loader} className="size-[20px]" />
-        )}
-      </div>
+    <div className="flex justify-center items-center gap-1 text-[rgba(var(--text))] text-sm font-bold">
+      <span>App Visited:</span>
+      <SiteViews
+        projectName="my-project"
+        visited={() => {
+          alert("Website visited");
+        }}
+        getData={(value) => {
+          console.log(value);
+        }}
+        refresh="10"
+        placeHolder={<img src={loader} alt="loader" className="size-[17px]" />}
+      />
     </div>
   );
 };
 
-export default ViewsCounter;
+export default memo(ViewsCounter);

@@ -88,15 +88,13 @@ const SecretKey = () => {
             <div className="flex items-center gap-1">
               🤍
               <div className="text-sm text-[rgba(var(--text))]">
-                {" "}
-                Mon Jun 17 2024, 6:53:11PM{" "}
+                Mon Jun 17 2024, 6:53:11PM
               </div>
               <ViewsCounter />
             </div>
           </a>
         </div>
         <h2 className="select-none mr-[280px]">Secret Key Generator</h2>
-
         <ul className={`${classes.link} select-none`}>
           <li>
             <a
