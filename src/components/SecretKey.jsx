@@ -98,7 +98,7 @@ const SecretKey = () => {
         <ul className={`${classes.link} select-none`}>
           <li>
             <a
-              href="https://github.com/DevAbabil"
+              href="https://github.com/LoveItsYou"
               target="_blank"
               title="GitHub"
             >
