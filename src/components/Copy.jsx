@@ -46,7 +46,7 @@ const Copy = ({ text, loading, error, copyCount, ...rest }) => {
   }, [text]);
 
   useEffect(() => {
-    let intervalId;
+    let timeoutId;
     const handleCopy = () => {
       let copyText = document.createElement("input");
       copyText.value = state.text;
@@ -56,7 +56,7 @@ const Copy = ({ text, loading, error, copyCount, ...rest }) => {
 
     if (state.copyClicked) {
       handleCopy();
-      intervalId = setTimeout(() => {
+      timeoutId = setTimeout(() => {
         dispatch({
           type: "RESET_COPY",
         });
@@ -68,7 +68,7 @@ const Copy = ({ text, loading, error, copyCount, ...rest }) => {
         type: "RESET_COPY",
       });
 
-    return () => clearInterval(intervalId);
+    return () => clearTimeout(timeoutId);
   }, [state.text, state.copyClicked, loading, error]);
 
   return (
